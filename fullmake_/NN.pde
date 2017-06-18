@@ -19,16 +19,30 @@ class Layer{
   }
   Node[] nodes;
   
+  float[][] weights;
+  
+  public void setWeight(int beforeLayerLength){
+   weights=new float[nodes.length][beforeLayerLength];
+  }
+  
+  public int getlength(){return nodes.length;}
+  
 }
 
 class NN{
- ArrayList layers=new ArrayList();
+  Layer[] layers;
+  private NN(int deep,int firstLaysSize){
+    layers=new Layer[deep];
+    layers[count]=new Layer(firstLaysSize);
+    layers[count].setWeight(0);
+    count++;
+  }
+  int count=0;
  public void addLayer(int size){
-   layers.add(new Layer(size));
+   layers[count]=new Layer(size);
+   layers[count].setWeight(layers[count-1].getlength());
+   count++;
  }
  
- public Layer getlayer(int deep){
-   return (Layer)layers.get(deep);
- }
  
 }
