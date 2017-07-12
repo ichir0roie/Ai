@@ -82,7 +82,10 @@ class NN {
   public void back_once(float[] teach) {
     //println("backward");
     for (int j=0; j<l[l.length-1].deep; j++) {
+      //println(teach);
+      //println(l[l.length-1].z);
       l[l.length-1].d[j]=l[l.length-1].z[j]-teach[j];
+      //println( l[l.length-1].d);
 
       for(int k=0;k<l[l.length-1].biasplace-1;k++){
       l[l.length-1].dz[j][k]+=(l[l.length-1].u[j]-teach[j])*l[l.length-2].z[k];
@@ -103,9 +106,9 @@ class NN {
       }
       for (int j=0; j<l[i].deep; j++) {
         for (int k=0; k<l[i].biasplace-1; k++) {
-          l[i].dz[j][k]=l[i].d[j]*l[i-1].z[k];
+          l[i].dz[j][k]+=l[i].d[j]*l[i-1].z[k];
         }
-        l[i].dz[j][l[i].biasplace-1]=l[i].d[j];
+        l[i].dz[j][l[i].biasplace-1]+=l[i].d[j];
       }
       //println();
     }
@@ -120,6 +123,7 @@ class NN {
           float cval=u*l[i].befwup[j][k];
           cval-=e/(float)forwardcount*(l[i].dz[j][k]+r*l[i].w[j][k]);
           l[i].w[j][k]+=cval;
+          //l[i].w[j][k]-=e/(float)forwardcount*l[i].dz[j][k];
           c++;
           l[i].befwup[j][k]=cval;
           ave-=cval/e;
