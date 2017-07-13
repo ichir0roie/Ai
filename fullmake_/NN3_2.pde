@@ -57,12 +57,14 @@ class NN {
     }
   }
 
-  public void forward(float[] input) {
+  public float[] forward(float[] input) {
 
-    forwardcount++;
     //println("forward");
     //l[0].u=input; 
     l[0].z=input;
+    //for(int i=0;i<input.length;i++){
+    //  l[0].z[i]=logistic(l[0].u[i]);
+    //}
     //println(input);
     for (int i=1; i<l.length; i++) {
       for (int j=0; j<l[i].deep; j++) {
@@ -77,9 +79,11 @@ class NN {
       }
       //println();
     }
+    return l[l.length-1].u;
   }
 
   public void back_once(float[] teach) {
+    forwardcount++;
     //println("backward");
     for (int j=0; j<l[l.length-1].deep; j++) {
       //println(teach);

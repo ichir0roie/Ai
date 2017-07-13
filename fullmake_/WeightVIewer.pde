@@ -32,7 +32,7 @@ public class NNViewer {
 
   public void elli(int nx, int ny, float size) {
     noStroke();
-
+fill(0,0,100);
     ellipse((float)nx*ellisize+ellisize, (float)ny*ellisize+ellisize, 
       size*ellisize/2, size*ellisize/2);
   }
