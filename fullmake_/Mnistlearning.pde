@@ -3,7 +3,7 @@ void settings() {
 }
 NN nn;
 
-int traindata=10;
+int traindata=6;
 float[][] ques=new float[traindata][28*28];
 float[][] answ=new float[traindata][10];
 int[] anss=new int[traindata];
@@ -11,14 +11,14 @@ int[] anss=new int[traindata];
 NNViewer nv;
 
 void setup() {
-  //frameRate(traindata);
+  frameRate(traindata);
   getfile();
   colorMode(HSB, 100, 100, 100, 100);
-  nn=new NN(new int[]{28*28, 100, 10}, 0.05, 0.5, 0.1);
+  nn=new NN(new int[]{28*28, 100, 10}, 0.05, 0.9, 0);
   setT();
   nv=new NNViewer(nn);
 }
-
+int time=0;
 public void setT() {
   for (int i=0; i<traindata; i++) {
     int place=(int)random(10000);
@@ -43,6 +43,8 @@ public void setT() {
 int count=0;
 boolean first=true;
 void draw() {
+  time++;
+  println(time);
   nn.forward(ques[count]);
   nn.back_once(answ[count]);
   count++;
@@ -53,12 +55,16 @@ void draw() {
 
     background(0, 0, 0, 0);
     for (int i=0; i<traindata; i++) {
-      if (first)print(anss[i]+":");
+      //print(anss[i]+":");
+      float[] vals=nn.forward(ques[i]);
       for (int j=0; j<10; j++) {
+        
         //println(j+":"+nn.forward(ques[i])[j]);
-        fill(0, 0, abs(nn.forward(ques[i])[j]*100));
+        fill(0, 0, abs(vals[j])*100);
+        //print(vals[j]+":");
         rect(i*25+300, 20*j, 20, 18);
       }
+      //println();
     }
     viewer();
 
