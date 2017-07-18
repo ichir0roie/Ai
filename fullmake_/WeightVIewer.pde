@@ -1,6 +1,6 @@
 public class NNViewer {
   Layer ls[];
-  float ellisize=70;
+  float ellisize=50;
   public NNViewer(NN usingNetwork) {
     ls=usingNetwork.l;
   }
@@ -18,7 +18,7 @@ public class NNViewer {
         if (ndc!=nownd-1) {
           elli(layc, ndc, ls[layc].z[ndc]);
           if (layc!=0)
-            lin(layc, ndc, befnd, ls[layc].w[ndc]);
+            lin(layc, ndc, befnd,  ls[layc].w[ndc]);
         } else {
           elli(layc,ndc,1);
         }
@@ -40,7 +40,8 @@ fill(0,0,100);
     for (int befc=0; befc<befy; befc++) {
       stroke(1);
       float buf=size[befc];
-      if (buf<0)buf=0;
+      //if (buf<0)buf=0;
+      buf=logistic(buf);
       strokeWeight(buf*ellisize/20);
       line((float)(nx-1)*ellisize+ellisize, 
         (float)befc*ellisize+ellisize, 

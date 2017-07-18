@@ -2,7 +2,6 @@ class Layer {
   float[] z;
   float[][] w;
   float[][] befwup;
-  //float b;
   float[] d;
   float[][] dz;
   float[] u;
@@ -120,20 +119,25 @@ class NN {
   public float updataWeight() {
     float ave=0;
     int c=0;
-    //println("weight");
     for (int i=1; i<l.length; i++) {
       for (int j=0; j<l[i].deep; j++) {
         for (int k=0; k<l[i].biasplace; k++) {
           float cval=u*l[i].befwup[j][k];
-          cval-=e/(float)forwardcount*(l[i].dz[j][k]+r*l[i].w[j][k]);
-          l[i].w[j][k]+=cval;
+          float w= l[i].w[j][k];
+          cval-=e/(float)forwardcount*(l[i].dz[j][k]+r*w);
+         w+=cval;
+          if(w<0.001)w=0;
+          l[i].w[j][k]=w;
           //l[i].w[j][k]-=e/(float)forwardcount*l[i].dz[j][k];
           c++;
           l[i].befwup[j][k]=cval;
           ave-=cval/e;
           l[i].dz[j][k]=0;
+          //print( w+":");
         }
+        //println();
       }
+      //println("---");
     }
     forwardcount=0;
     return ave/c;

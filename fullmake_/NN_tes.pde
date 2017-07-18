@@ -1,130 +1,140 @@
-NN teN;
-NNViewer nv;
+//NN teN;
+//NNViewer nv;
 
-void settings() {
-  size(400, 400);
-}
+//void settings() {
+//  size(800, 400);
+//}
 
-void setup() {
+//int[] lay=new int[]{2, 3, 3, 1};
+//float q=0.5;
+//float u=0.9;
+//float r=0.01;
+//int traindata=8;
 
-  colorMode(HSB, 100, 100, 100,100);
-  teN=new NN(new int[]{2, 4,4, 1}, 0.5, 0.7, 0.0001);
+//void setup() {
 
-  //frameRate(1);
+//  colorMode(HSB, 100, 100, 100, 100);
+//  teN=new NN(lay, q, u, r);
 
-  nv=new NNViewer(teN);
+//  //frameRate(1);
 
-
-  setTrain();
-}
+//  nv=new NNViewer(teN);
 
 
-float ExFunc(float x, float y) {
-  float ret=0;
-  if (y>x)ret=1;
-  //ret=x+y;
+//  setTrain();
+//}
 
-  return ret;
-}
 
-int traindata=8;
-float[][] train=new float[traindata][2];
-float[] tea=new float[traindata];
+//float ExFunc(float x, float y) {
+//  float ret=0;
+//  if (y>x)ret=1;
+//  //ret=x+y;
 
-public void setTrain() {
-  for (int i=0; i<traindata; i++) {
-    train[i][0]=random(1);
-    train[i][1]=random(1);
-    tea[i]=ExFunc(train[i][0], train[i][1]);
-  }
-}
+//  return ret;
+//}
 
-//public void learning(int trys) {
-//  for (int i=0; i<trys; i++) {
-//    for (int j=0; j<trainlength; j++) {
-//      println("num:"+j);
+//float[][] train=new float[traindata][2];
+//float[] tea=new float[traindata];
 
-//      println("te:"+tea[j]);
-
-//      teN.forward(train[j]);
-//      teN.back_once(new float[]{tea[j]});
-//      println("er:"+(tea[j]-teN.l[teN.l.length-1].z[0]));
-
-//      nv.update(teN);
-//      nv.View();
-//    }
-//      teN.updataWeight();
+//int progcou=0;
+//float aver=0;
+//float averbef=0;
+//public void setTrain() {
+//  for (int i=0; i<traindata; i++) {
+//    progcou=0;
+//    averbef=100;
+//    train[i][0]=random(1);
+//    train[i][1]=random(1);
+//    tea[i]=ExFunc(train[i][0], train[i][1]);
 //  }
 //}
 
-int j=0;
-int i=0;
+////public void learning(int trys) {
+////  for (int i=0; i<trys; i++) {
+////    for (int j=0; j<trainlength; j++) {
+////      println("num:"+j);
 
-float er=0;
+////      println("te:"+tea[j]);
 
-boolean learningMode=true;
-boolean stopadmin=false;
+////      teN.forward(train[j]);
+////      teN.back_once(new float[]{tea[j]});
+////      println("er:"+(tea[j]-teN.l[teN.l.length-1].z[0]));
 
-void draw() {
-  if (learningMode) {
-    stopadmin=false;
-    //println("num:"+j);
+////      nv.update(teN);
+////      nv.View();
+////    }
+////      teN.updataWeight();
+////  }
+////}
 
-    //println("te:"+tea[j]);
-    teN.forward(train[j]);
-    teN.back_once(new float[]{tea[j]});
-    //println("ou:"+teN.l[teN.l.length-1].u[0]);
-    //println("er:"+(tea[j]-teN.l[teN.l.length-1].u[0]));
-    er+=abs(tea[j]-teN.l[teN.l.length-1].u[0]);
+//int j=0;
+//int i=0;
 
-    nv.update(teN);
-    //nv.View();
+//float er=0;
 
-    j++;
-    if (j>=traindata) {
-      teN.updataWeight();
-      nv.update(teN);
-      println("aveerror:"+er/traindata);
-      er=0;
-      j=0;
-      stopadmin=true;
-      testView();
-    }
+//boolean learningMode=true;
 
+//void draw() {
+//  if (learningMode) {
+//    //println("num:"+j);
 
-
-    i++;
-  }
-  if (keyPressed&&stopadmin) {
-    if (key=='l') {
-      learningMode=true;
-    } else if (key=='v') {
-      learningMode=false; 
-      testView();
-    }
-  }
-}
+//    //println("te:"+tea[j]);
+//    teN.forward(train[j]);
+//    teN.back_once(new float[]{tea[j]});
+//    //println("ou:"+teN.l[teN.l.length-1].u[0]);
+//    //println("er:"+(tea[j]-teN.l[teN.l.length-1].u[0]));
+//    er+=abs(tea[j]-teN.l[teN.l.length-1].u[0]);
 
 
-public void testView() {
-  background(50, 50, 50);
-  float len=0.01;
+//    nv.update(teN);
+//    nv.View(); 
+//    testView();
 
-  for (float x=0; x<1; x+=len) {
-    for (float y=0; y<1; y+=len) {
-      float teath=ExFunc(x, y);
-      float test=teN.forward(new float[]{x, y})[0];
-      float er=abs(test-teath);
-      noStroke();
-      fill(0, 0, teath*100);
-      rect(x*width, (1-y)*height, width*len, height*len);
-      fill(0, 100,100,er*100);
-      rect(x*width, (1-y)*height, width*len/2, height*len/2);
-    }
-  }
-  for (int i=0; i<traindata; i++) {
-    //noStroke();
-    fill(60, 100, 100);
-    ellipse(train[i][0]*width, train[i][1]*height, width*len*3, height*len*3) ;
-  }
-}
+//    j++;
+//    if (j>=traindata) {
+
+//      teN.updataWeight();
+//      nv.update(teN);
+//      aver=er/traindata;
+
+//      if (key=='c') {
+//        key='q';
+//        setTrain();
+//      } else if (key=='p') {
+//        learningMode=false;
+//      } else {
+//        averbef=aver;
+//      }
+//      println("aveerror:"+er/traindata);
+
+//      er=0;
+//      j=0;
+//    }
+//  } else {
+//    //playmode
+//  }
+//}
+
+
+//public void testView() {
+//  //background(50, 50, 50);
+//  float len=0.01;
+
+//  for (float x=0; x<1; x+=len) {
+//    for (float y=0; y<1; y+=len) {
+//      float teath=ExFunc(x, y);
+//      float test=teN.forward(new float[]{x, y})[0];
+//      float er=abs(test-teath);
+//      noStroke();
+//      fill(0, 0, teath*100);
+//      rect(x*height+width/2, (1-y)*height, height*len, height*len);
+//      fill(0, 100, 100, er*100);
+//      rect(x*height+width/2, (1-y)*height, height*len/2, height*len/2);
+//    }
+//  }
+//  for (int i=0; i<traindata; i++) {
+//    //noStroke();
+//    fill(60, 100, 100);
+//    ellipse(train[i][0]*height+width/2, train[i][1]*height, height*len*3, height*len*3) ;
+//  }
+//}
