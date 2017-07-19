@@ -3,7 +3,7 @@
 //}
 //NN nn;
 
-//int traindata=10;
+//int traindata=2;
 //float[][] ques=new float[traindata][28*28];
 //float[][] answ=new float[traindata][10];
 //int[] anss=new int[traindata];
@@ -14,7 +14,7 @@
 //  //frameRate(traindata);
 //  getfile();
 //  colorMode(HSB, 100, 100, 100, 100);
-//  nn=new NN(new int[]{28*28, 100, 28*28}, 0.005, 0.5, 0.1);
+//  nn=new NN(new int[]{28*28, 100, 28*28}, 0.001, 0.9, 0.0001);
 //  for (int i=0; i<traindata; i++) {
 //    int place=(int)random(10000);
 //    //println(place);
