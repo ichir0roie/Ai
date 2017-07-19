@@ -126,7 +126,7 @@ class NN {
           float w= l[i].w[j][k];
           cval-=e/(float)forwardcount*(l[i].dz[j][k]+r*w);
          w+=cval;
-          if(w<0.001)w=0;
+          if(w>10000000)w=10000000;
           l[i].w[j][k]=w;
           //l[i].w[j][k]-=e/(float)forwardcount*l[i].dz[j][k];
           c++;
