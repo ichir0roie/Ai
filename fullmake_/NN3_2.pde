@@ -78,7 +78,17 @@ class NN {
       }
       //println();
     }
+    
     return l[l.length-1].u;
+  }
+  
+  public float geterror(float[] teach){
+    float ave=0;
+    
+   for(int i=0;i<teach.length;i++){
+    ave+=abs(teach[i]-l[l.length-1].u[i]); 
+   }
+     return ave;
   }
 
   public void back_once(float[] teach) {
