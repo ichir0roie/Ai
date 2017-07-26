@@ -3,19 +3,22 @@ void settings() {
 }
 NN nn;
 
-int traindata=4;
+int traindata=15;
 float[][] ques=new float[traindata][28*28];
 float[][] answ=new float[traindata][10];
 int[] anss=new int[traindata];
 
 NNViewer nv;
 
+
+PrintWriter out;
+
 void setup() {
   key='l';
   //frameRate(traindata);
   getfile();
   colorMode(HSB, 100, 100, 100, 100);
-  nn=new NN(new int[]{28*28, 100, 28*28}, 0.01, 0.5, 0.5);
+  nn=new NN(new int[]{28*28, 100, 28*28}, 0.03, 0.55, 0.3);
   for (int i=0; i<traindata; i++) {
     int place=(int)random(10000);
     //println(place);
@@ -35,12 +38,26 @@ void setup() {
     println();
   }
   nv=new NNViewer(nn);
+
+  out=createWriter("outdata.txt");
 }
 int count=0;
 boolean first=true;
 
-float[][] es=new float[1000000][2];
+float[][] es=new float[500][2];
 int escount=0;
+int rescount=0;
+public void reset_es() {
+  //TODO output textfile
+  escount=0;
+
+  for (int i=0; i<es.length; i++) {
+    out.println(i+es.length*rescount+"  "+
+      es[i][0]+"  "+es[i][1]);
+  }
+  out.flush();
+  rescount++;
+}
 
 float buferror=0;
 void draw() {
@@ -52,14 +69,13 @@ void draw() {
 
   if (count>=traindata) {
     //background(0, 0, 50);
-    if (escount<es.length) {
-      es[escount][0]=buferror/count;
-      println("-----------"+escount);
-      println(es[escount][0]);
-      buferror=0;
-      count=0;
-      nn.updataWeight();
-    }
+    es[escount][0]=buferror/count;
+    println("-----------"+escount);
+    println(es[escount][0]);
+    buferror=0;
+    count=0;
+    nn.updataWeight();
+
 
 
 
@@ -94,19 +110,23 @@ void draw() {
         viewPic_nonn(tesin2, w+1, h);
       }
     }
-    if (escount<es.length) {
-      es[escount][1]=buferror/6;
-      println(es[escount][1]);
+    es[escount][1]=buferror/6;
+    println(es[escount][1]);
 
-      buferror=0;
-    }
-    escount++;
+    buferror=0;
 
     printLine();
+
+    escount++;
+    if (escount>=es.length) {
+      reset_es();
+    }
   }
 }
 
-
+void dispose(){
+ out.close(); 
+}
 
 public void viewPic(float[] dat, int w, int h) {
   float[] tes=nn.forward(dat);
@@ -127,8 +147,8 @@ public void viewPic_nonn(float[] dat, int w, int h) {
 }
 float setter=400;
 public void printLine() {
-  float[] val=es[escount-1];
-  float x=setter+escount;
+  float[] val=es[escount];
+  float x=setter+escount+es.length*rescount;
   if (x>width) {
     setter-=600;
     background(0, 0, 60);

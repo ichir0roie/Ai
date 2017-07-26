@@ -93,21 +93,15 @@ class NN {
 
   public void back_once(float[] teach) {
     forwardcount++;
-    //println("backward");
     for (int j=0; j<l[l.length-1].deep; j++) {
-      //println(teach);
-      //println(l[l.length-1].z);
       l[l.length-1].d[j]=l[l.length-1].z[j]-teach[j];
-      //println( l[l.length-1].d);
 
       for(int k=0;k<l[l.length-1].biasplace-1;k++){
       l[l.length-1].dz[j][k]+=(l[l.length-1].u[j]-teach[j])*l[l.length-2].z[k];
       }
       l[l.length-1].dz[j][l[l.length-1].biasplace-1]+=(l[l.length-1].u[j]-teach[j]);
       
-      //print(l[l.length-1].d[j]+"||");
     }
-    //println();
 
     for (int i=l.length-1-1; i>0; i--) {
       for (int j=0; j<l[i+1].biasplace; j++) {
@@ -123,7 +117,6 @@ class NN {
         }
         l[i].dz[j][l[i].biasplace-1]+=l[i].d[j];
       }
-      //println();
     }
   }
   public float updataWeight() {
