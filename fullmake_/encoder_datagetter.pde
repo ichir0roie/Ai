@@ -3,7 +3,7 @@ void settings() {
 }
 NN nn;
 
-int traindata=15;
+int traindata=3;
 float[][] ques=new float[traindata][28*28];
 float[][] answ=new float[traindata][10];
 int[] anss=new int[traindata];
@@ -18,9 +18,10 @@ void setup() {
   //frameRate(traindata);
   getfile();
   colorMode(HSB, 100, 100, 100, 100);
-  nn=new NN(new int[]{28*28, 100, 28*28}, 0.03, 0.55, 0.3);
+  nn=new NN(new int[]{28*28, 10, 28*28}, 0.025, 0.01, 0.99);
   for (int i=0; i<traindata; i++) {
-    int place=(int)random(10000);
+    //int place=(int)random(10000);
+    int place=i;
     //println(place);
     int[] bu=getPic(place);
     for (int j=0; j<bu.length; j++) {
@@ -98,23 +99,29 @@ void draw() {
       }
       if (first)first=false;
     }
+    int c=0;
     for (int w=0; w<4; w+=2) {
       for (int h=0; h<3; h++) {
         float[] tesin2=new float[28*28];
+        float[] tesin2_2=new float[28*28];
         int[] bu=getPic((int)random(10000));
+        int[] bu_2=getPic(c);
+        c++;
         for (int j=0; j<bu.length; j++) {
           tesin2[j]=(float)bu[j]/255;
+          tesin2_2[j]=(float)bu_2[j]/255;
         }
         viewPic(tesin2, w, h);
+        viewPic(tesin2_2, w+5, h);
         buferror+=nn.geterror(tesin2);
         viewPic_nonn(tesin2, w+1, h);
+        viewPic_nonn(tesin2_2, w+1+5, h);
       }
     }
     es[escount][1]=buferror/6;
     println(es[escount][1]);
-
     buferror=0;
-
+    
     printLine();
 
     escount++;
